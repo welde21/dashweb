@@ -26,7 +26,8 @@ merged = gdf.merge(
     right_on="Sub city",
     how="left"
 )
-
+merged = merged.fillna(0)
+merged = merged[merged.geometry.notnull()]
 # Subcity values
 subcities = df["Sub city"].unique()
 
@@ -421,7 +422,7 @@ app.layout = dbc.Container([
 
                     dcc.Graph(
                         id="line_chart",
-                        animate=True
+                        #animate=True
                     )
 
                 ])
