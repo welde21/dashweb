@@ -697,33 +697,40 @@ def update_charts(value):
     # =================================================
     # MAP
     # =================================================
-    fig_map = px.choropleth_mapbox(
+    fig_map = px.choropleth_map(
     merged,
-    geojson=merged.__geo_interface__,
-    locations="id",
-    featureidkey="properties.id",
+    geojson=merged.geometry,
+    locations=merged.index,
     color=value,
-    mapbox_style="carto-positron",
-    center={"lat": 8.96, "lon": 38.80},
-    zoom=10,
-    opacity=0.7,
     hover_name="Sub city",
-    color_continuous_scale=px.colors.sequential.Peach
+    center={"lat": 8.96, "lon": 38.80},
+    zoom=9,
+    opacity=0.8,
+    color_continuous_scale="Viridis"
 )
 
-    # BLACK BORDERS
+    # # BLACK BORDERS
+    # fig_map.update_traces(
+    #     marker_line_color="black",
+    #     marker_line_width=2
+    # )
+
+    # fig_map.update_layout(
+    #     margin={
+    #         "r": 0,
+    #         "t": 0,
+    #         "l": 0,
+    #         "b": 0
+    #     }
+    # )
     fig_map.update_traces(
-        marker_line_color="black",
-        marker_line_width=2
-    )
+    marker_line_color="black",
+    marker_line_width=1.5
+)
 
     fig_map.update_layout(
-        margin={
-            "r": 0,
-            "t": 0,
-            "l": 0,
-            "b": 0
-        }
+    margin=dict(r=0, t=0, l=0, b=0),
+    height=500
     )
 
     return (
