@@ -176,7 +176,7 @@ app.layout = dbc.Container([
         mb-4
         """
     ),
-    html.Div(style={"height": "130px"}),
+    html.Div(style={"height": "150px"}),
     # =================================================
     # DROPDOWNS
     # =================================================
@@ -440,44 +440,90 @@ app.layout = dbc.Container([
     # =================================================
     # FOOTER
     # =================================================
-    dbc.Row([
+    dbc.Container(
 
-        dbc.Col([
+    dbc.Row(
 
-            html.H5("MCH Dashboard"),
+        [
 
-            html.P(
-                "Copyright © 2026 "
-                "All rights reserved."
-            )
+            # LEFT SIDE
+            dbc.Col(
+                [
 
-        ],className="md-2"),
+                    html.H5(
+                        "Addis Ababa MCH Dashboard",
+                        className="fw-bold mb-2"
+                    ),
 
-        dbc.Col([
+                    html.P(
+                        "Maternal and Child Health data visualization and monitoring dashboard.",
+                        className="mb-1"
+                    ),
+                      html.P(
+                        "Copyright ©2026 | EPHI",
+                        className="mb-1"
+                    ),
 
-            html.P(
-                "Contact : Weldemariam Bahre"
+
+
+                ],
+
+                xs=12,
+                sm=12,
+                md=6,
+                lg=6,
+
+                className="mb-3 text-center text-md-start"
             ),
 
-            html.P(
-                "Email : weldemariambahre@gmail.com"
+
+            # RIGHT SIDE
+            dbc.Col(
+                [
+
+                    html.P(
+                        "Desing by: Weldemariam Bahre",
+                        className="mb-1"
+                    ),
+
+                    html.P(
+                        "Email: weldemariambahre@gmail.com",
+                        className="mb-1"
+                    ),
+
+                    html.P(
+                        "Phone: +251946674151",
+                        className="mb-1"
+                    ),
+
+                ],
+
+                xs=12,
+                sm=12,
+                md=6,
+                lg=6,
+
+                className="text-center text-md-end"
             ),
 
-            html.P(
-                "Phone : +251946674151"
-            )
+        ],
 
-        ],className="md-2")
+        className="align-items-center"
 
-    ],
-        className="""
-        bg-primary
-        text-white
-        p-2
-        rounded-top
-        mt-3
-        """
-    )
+    ),
+
+    fluid=True,
+
+    style={
+     "backgroundColor": "#0B1F3A",
+    "color": "white",
+    "padding": "15px 20px",
+    "fontFamily": "Segoe UI, sans-serif",
+    "fontSize": "14px",
+    "borderTop": "2px solid white"
+    }
+
+)
 
 ],
     fluid=True,
@@ -704,25 +750,15 @@ def update_charts(value):
     color=value,
     hover_name="Sub city",
     center={"lat": 8.96, "lon": 38.80},
-    zoom=9,
-    opacity=0.8,
+    zoom=10,
+    opacity=0.7,
+    #opacity=1,
     color_continuous_scale="Viridis"
+    # [
+    #     [0, "rgba(59, 151, 151,0.3)"],
+    #     [1, "rgba(255,165,0,1)"]
+    # ]
 )
-
-    # # BLACK BORDERS
-    # fig_map.update_traces(
-    #     marker_line_color="black",
-    #     marker_line_width=2
-    # )
-
-    # fig_map.update_layout(
-    #     margin={
-    #         "r": 0,
-    #         "t": 0,
-    #         "l": 0,
-    #         "b": 0
-    #     }
-    # )
     fig_map.update_traces(
     marker_line_color="black",
     marker_line_width=1.5
@@ -781,8 +817,8 @@ def update_data(subcity):
 # RUN APP
 # =====================================================
 if __name__ == "__main__":
-    app.run_server(host="0.0.0.0", port=8050, debug=False)
-   # app.run(debug=True)
+    #app.run_server(host="0.0.0.0", port=8050, debug=False)
+    app.run(debug=True)
     
 # app = Dash(__name__)
 
