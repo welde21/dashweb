@@ -142,7 +142,7 @@ app.layout = dbc.Container([
                 """
             ),
             html.H6(
-                "የአዲስ አበባ ከተማ አስተዳደር የእናቶች እና ህፃናት ጤና የመረጃ ጥንቅር ...",
+                "የአዲስ አበባ ከተማ አስተዳደር የእናቶች እና ህፃናት ጤና የመረጃ ጥንቅር",
 
                 className="""
                 text-secondary
@@ -204,22 +204,22 @@ app.layout = dbc.Container([
 
                     {
                         "label": "First Antenatal Care",
-                        "value": "anc1"
+                        "value": "First ANC"
                     },
 
                     {
                         "label": "Second Antenatal Care",
-                        "value": "anc2"
+                        "value": "Second ANC"
                     },
 
                     {
                         "label": "Total Antenatal Care",
-                        "value": "anc"
+                        "value": "ANC"
                     },
 
                     {
                         "label": "Total Delivery",
-                        "value": "delivery"
+                        "value": "TD"
                     },
 
                     {
@@ -249,7 +249,7 @@ app.layout = dbc.Container([
 
                 ],
 
-                value="anc",
+                value="ANC",
                 clearable=False
 
             )
@@ -911,11 +911,11 @@ def update_data(subcity):
 
     temp = df[df["Sub city"] == subcity]
 
-    anc = temp["anc"].iloc[0]
+    anc = temp["ANC"].iloc[0]
     nd = temp["ND"].iloc[0]
     bd = temp["BCG"].iloc[0]
     svd = temp["SVD"].iloc[0]
-    delivery = temp["delivery"].iloc[0]
+    delivery = temp["TD"].iloc[0]
     sb = temp["SB"].iloc[0]
 
     return (
@@ -977,8 +977,8 @@ def disease(value):
 # RUN APP
 # =====================================================
 if __name__ == "__main__":
-    app.run_server(host="0.0.0.0", port=8050, debug=False)
-    #app.run(debug=True)
+    #app.run_server(host="0.0.0.0", port=8050, debug=False)
+    app.run(debug=True)
     
 # app = Dash(__name__)
 
