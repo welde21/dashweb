@@ -4,6 +4,7 @@ import geopandas as gpd
 
 from dash import Dash, html, dcc, Input, Output, callback
 import dash_bootstrap_components as dbc
+import plotly.graph_objects as go
 
 
 # =====================================================
@@ -12,9 +13,11 @@ import dash_bootstrap_components as dbc
 
 
 df = pd.read_csv("data/Health.csv")
-
+summary = pd.read_csv("data/summary.csv")
+diseas = pd.read_csv("data/disease.csv")
 gdf = gpd.read_file("data/Addis.geojson")
-#print(gdf.head())
+#print(summary.head())
+# print(diseas.head())
 # IMPORTANT:
 # Convert CRS BEFORE merge
 gdf = gdf.to_crs(epsg=4326)
@@ -118,8 +121,8 @@ app.layout = dbc.Container([
 
         dbc.Col([
 
-            html.H2(
-                "Addis Ababa City MCH Dashboard",
+            html.H5(
+                "Addis Ababa City Administration",
 
                 className="""
                 text-primary
@@ -128,9 +131,18 @@ app.layout = dbc.Container([
                 mb-2
                 """
             ),
+       html.H6(
+                "Land-Family project Land Scope Review MCH Dashboard",
 
-            html.H5(
-                "የአዲስ አበባ ከተማ የእናቶች እና ህፃናት መረጃ ጥንቅር",
+                className="""
+                text-primary
+                fw-bold
+                text-center
+                mb-2
+                """
+            ),
+            html.H6(
+                "የአዲስ አበባ ከተማ አስተዳደር የእናቶች እና ህፃናት ጤና የመረጃ ጥንቅር ...",
 
                 className="""
                 text-secondary
@@ -150,7 +162,7 @@ app.layout = dbc.Container([
                 className="""
                 text-center
                 fw-bold
-                text-success
+                text-successdashboard
                 """
             )
 
@@ -410,19 +422,94 @@ app.layout = dbc.Container([
     ),
 
     # =================================================
-    # LINE CHART
+    # Dropdown
     # =================================================
-    dbc.Row([
+     dbc.Row([
+         
+        dbc.Col([
+
+            dcc.Dropdown(
+
+                id="summary_data",
+
+                options=[
+
+                    {
+                        "label": "Total number of live births",
+                        "value": "Total number of live births"
+                    },
+
+                    {
+                        "label": "Neonatal death (Per 1000 live births)",
+                        "value": "Neonatal death (Per 1000 live births)"
+                    },
+
+                    {
+                        "label": "Maternal death (Per 100,000 births))",
+                        "value": "Maternal death (Per 100,000 births))"
+                    },
+
+                  
+
+                ],
+
+                value="Total number of live births",
+                multi=True,
+                clearable=False
+
+            )
+
+        ], lg=6),
 
         dbc.Col([
 
-            dbc.Card([
+            dcc.Dropdown(
 
+                id="disease",
+
+                options=[
+                     {
+                        "label": "Incidence of malaria cases per 1,000",
+                        "value": "Incidence of all malaria cases per 1,000"
+                    },
+                     {
+                        "label": "Prevalence, HIV",
+                        "value": "Prevalence, HIV"
+                    },
+                     {
+                        "label": "Prevalence, Sepsis/1,000",
+                        "value": "Prevalence, Sepsis/1,000"
+                    },
+                     {
+                        "label": "TB Incidence per 100,000 population",
+                        "value": "TB Incidence per 100,000 population"
+                    },
+                ],
+
+                value="TB Incidence per 100,000 population",
+                multi=True,
+                clearable=False
+
+            )
+
+        ], lg=6)
+
+    ],
+        className="mb-4 g-3"
+    ),
+
+
+    dbc.Row([
+         
+        dbc.Col([
+
+            dbc.Card([
+            html.H6("Maternal and child delivery outcomes in each region, 2022 to 2025 ", className="text-center"),
                 dbc.CardBody([
 
                     dcc.Graph(
-                        id="line_chart",
-                        #animate=True
+                        id="summary_graphe",
+                        figure={}
                     )
 
                 ])
@@ -431,10 +518,33 @@ app.layout = dbc.Container([
                 className="shadow-sm border-0 rounded-4"
             )
 
-        ])
+        ], lg=6),
+        
+    # =================================================
+    # LINE CHART 
+    # =================================================
+
+        dbc.Col([
+
+            dbc.Card([
+            html.H6("prevalence some communicable  disease", className="text-center"),
+                dbc.CardBody([
+
+                    dcc.Graph(
+                        id="Disease_chart",
+                        figure={}
+                    )
+
+                ])
+
+            ],
+                className="shadow-sm border-0 rounded-4"
+            )
+
+        ], lg=6)
 
     ],
-        className="mb-4"
+        className="mb-4 g-3"
     ),
 
     # =================================================
@@ -515,7 +625,7 @@ app.layout = dbc.Container([
     fluid=True,
 
     style={
-     "backgroundColor": "#0B1F3A",
+     "backgroundColor": "#0F4C5C",
     "color": "white",
     "padding": "15px 20px",
     "fontFamily": "Segoe UI, sans-serif",
@@ -542,10 +652,10 @@ app.layout = dbc.Container([
 
     Output("Bar_graphe", "figure"),
     Output("Pie_graphe", "figure"),
-    Output("line_chart", "figure"),
     Output("Addis_map", "figure"),
 
     Input("health_value", "value")
+
 )
 def update_charts(value):
 
@@ -665,80 +775,82 @@ def update_charts(value):
     # =================================================
     # LINE CHART
     # =================================================
-    line_fig = px.line(
+    
+    # line_fig = px.line(
 
-        sorted_df,
+    #     sorted_df,
 
-        x="Sub city",
-        y=value,
+    #     x="Sub city",
+    #     y=value,
 
-        markers=True,
+    #     markers=True,
 
-        template="plotly_white"
-    )
+    #     template="plotly_white"
+    # )
 
-    line_fig.update_traces(
-        marker_line_width=3,
-        marker_line_color="black",
+    # line_fig.update_traces(
+    #     marker_line_width=3,
+    #     marker_line_color="black",
 
-        line=dict(
-            width=5,
-            shape="spline"
-        ),
+    #     line=dict(
+    #         width=5,
+    #         shape="spline"
+    #     ),
 
-        marker=dict(
-            size=12,
-            line=dict(
-                width=2,
-                color="blue"
-            )
-        ),
+    #     marker=dict(
+    #         size=12,
+    #         line=dict(
+    #             width=2,
+    #             color="blue"
+    #         )
+    #     ),
 
-        hovertemplate=
-        "<b>%{x}</b><br>" +
-        f"{value}: " +
-        "%{y:,}<extra></extra>"
-    )
+    #     hovertemplate=
+    #     "<b>%{x}</b><br>" +
+    #     f"{value}: " +
+    #     "%{y:,}<extra></extra>"
+    # )
 
-    line_fig.update_layout(
+    # line_fig.update_layout(
 
-        title={
-            "text": f"{value} Trend by Sub City",
-            "x": 0.5
-        },
+    #     title={
+    #         "text": f"{value} Trend by Sub City",
+    #         "x": 0.5
+    #     },
 
-        height=500,
+    #     height=500,
 
-        hovermode="x unified",
+    #     hovermode="x unified",
 
-        paper_bgcolor="#f8f9fa",
-        plot_bgcolor="#f8f9fa",
+    #     paper_bgcolor="#f8f9fa",
+    #     plot_bgcolor="#f8f9fa",
 
-        font=dict(
-            family="Arial",
-            size=14
-        ),
+    #     font=dict(
+    #         family="Arial",
+    #         size=14
+    #     ),
 
-        margin=dict(
-            t=70,
-            l=40,
-            r=40,
-            b=40
-        ),
+    #     margin=dict(
+    #         t=70,
+    #         l=40,
+    #         r=40,
+    #         b=40
+    #     ),
 
-        transition={
-            "duration": 1200,
-            "easing": "cubic-in-out"
-        }
-    )
+    #     transition={
+    #         "duration": 1200,
+    #         "easing": "cubic-in-out"
+    #     }
+    # )
 
-    line_fig.update_xaxes(
-        showgrid=False
-    )
+    # line_fig.update_xaxes(
+    #     showgrid=False
+    # )
 
-    line_fig.update_yaxes(
-        gridcolor="lightgray"
-    )
+    # line_fig.update_yaxes(
+    #     gridcolor="lightgray"
+    # )
+
 
     # =================================================
     # MAP
@@ -769,11 +881,14 @@ def update_charts(value):
     height=500
     )
 
+
+
     return (
         bar_fig,
         pie_fig,
-        line_fig,
-        fig_map
+        #line_fig,
+        fig_map,
+        #summary_line
     )
 
 
@@ -788,6 +903,7 @@ def update_charts(value):
     Output("SVD-cart", "children"),
     Output("delivery-cart", "children"),
     Output("SB-cart", "children"),
+    #Output("Addis_map", "figure"),
 
     Input("subcity-dropdown", "value")
 )
@@ -812,7 +928,51 @@ def update_data(subcity):
         f"{sb:,}"
     )
 
+@callback(
+    Output("summary_graphe","figure"),
+    Input("summary_data","value")
+)
+def summary_graphe(value):
+    summary_line = px.line(
+        summary,
+        x="year",
+        y=value,
+        markers=True,
+        template="plotly_white"
+    )
 
+    summary_line.update_layout(
+        legend=dict(
+            orientation="h",   # horizontal legend
+            yanchor="bottom",
+            y=-0.4,            # pushes legend below graph
+            xanchor="center",
+            x=0.5
+        )
+    )
+
+    return summary_line
+@callback(
+    Output("Disease_chart","figure"),
+    Input("disease","value")
+
+)
+def disease(value):
+       diseas_line= px.line(diseas,x="Years",
+                          y=value,
+                          markers=True,
+                         template="plotly_white"
+                          )
+       diseas_line.update_layout(
+        legend=dict(
+            orientation="h",   # horizontal legend
+            yanchor="bottom",
+            y=-0.4,            # pushes legend below graph
+            xanchor="center",
+            x=0.5
+        )
+       )
+       return diseas_line
 # =====================================================
 # RUN APP
 # =====================================================
