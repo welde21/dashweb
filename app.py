@@ -132,7 +132,7 @@ app.layout = dbc.Container([
                 """
             ),
        html.H6(
-                "Land-Family project Land Scope Review MCH Dashboard",
+                "LINDA Familia project Land Scope Review MCH Dashboard",
 
                 className="""
                 text-primary
