@@ -98,24 +98,25 @@ app.layout = dbc.Container([
     # =================================================
     # HEADER
     # =================================================
-    dbc.Row([
+    dbc.Row(
+
+    [
 
         dbc.Col([
 
             html.Div(
                 html.Img(
-                        src="/assets/logo.png",
-                    height="100px"
-                    ),
-                className="""
-                text-center
-                fw-bold
-                text-primary
-                """
+                    src="/assets/logo.png",
+                    style={
+                        "height": "70px",
+                        "maxWidth": "100%"
+                    }
+                ),
+                className="text-center"
             )
 
         ],
-            width=2,
+            xs=3, md=2,
             className="d-flex align-items-center justify-content-center"
         ),
 
@@ -123,72 +124,58 @@ app.layout = dbc.Container([
 
             html.H5(
                 "Addis Ababa City Administration",
-
                 className="""
                 text-primary
                 fw-bold
                 text-center
-                mb-2
+                mb-1
                 """
             ),
-       html.H6(
-                "LINDA Familia project Landscape review MCH Dashboard",
 
-                className="""
-                text-primary
-                fw-bold
-                text-center
-                mb-2
-                """
-            ),
             html.H6(
-                "የአዲስ አበባ ከተማ አስተዳደር የእናቶች እና ህፃናት ጤና የመረጃ ጥንቅር",
-
+                "LINDA Familia project Landscape review MCH Dashboard",
                 className="""
-                text-secondary
+                text-primary
                 text-center
+                mb-0
                 """
-            )
+            ),
 
         ],
-            width=8,
+            xs=6, md=8,
             className="d-flex flex-column justify-content-center"
         ),
 
         dbc.Col([
-
             html.Div(
-               # "HEALTH",
-                className="""
-                text-center
-                fw-bold
-                text-successdashboard
-                """
+                className="text-center fw-bold text-success"
             )
-
         ],
-            width=2,
+            xs=3, md=2,
             className="d-flex align-items-center justify-content-center"
         )
 
-    ],style={
+    ],
+
+    style={
         "position": "fixed",
         "top": "0",
         "left": "0",
         "right": "0",
         "zIndex": "999",
         "backgroundColor": "white",
-        "padding": "10px",
+        "padding": "4px 8px",
     },
-        className="""
-        bg-white
-        shadow-sm
-        rounded-4
-        p-3
-        mb-4
-        """
-    ),
-    html.Div(style={"height": "150px"}),
+
+    className="""
+    shadow-sm
+    rounded-3
+    mb-1
+    """
+),
+
+# space below fixed header
+html.Div(style={"height": "110px"}),
     # =================================================
     # DROPDOWNS
     # =================================================
@@ -293,7 +280,7 @@ app.layout = dbc.Container([
 
                 dbc.CardHeader(
                     html.H5(
-                        "Addis Ababa MCH Map",
+                        "የአዲስ እበባ ከተማ አስተዳደር ካርታ Addis Ababa MCH Map",
                         className="text-center"
                     )
                 ),
@@ -313,7 +300,30 @@ app.layout = dbc.Container([
 
         # KPI CARDS
         dbc.Col([
+                dbc.Alert(
 
+    [
+
+        html.H6(
+            "የዳሽቦርድ አጠቃላይ መግለጫ (Dashboard Overview)",
+            className="fw-bold text-center mb-2"
+        ),
+
+        html.P(
+            "ይህ ዳሽቦርድ በሊንዳ ፋሚሊያ ፕሮጀክት ስር በአዲስ አበባ ከተማ አስተዳደር የእናቶችና የህፃናት ጤና መረጃዎችን ለመከታተል እና ለመተንተን የተዘጋጀ ነው።",
+            className="mb-2 text-left"
+        ),
+
+        html.P(
+            "This dashboard provides interactive visualization and monitoring of Maternal and Child Health (MCH) indicators across Addis Ababa Addministration under the LINDA Familia Project.",
+            className="mb-0 text-left"
+        )
+
+    ],
+
+    color="light",
+    className="shadow-sm rounded-4 border-0 mb-3"
+),
             dbc.Row([
 
                 dbc.Col([
@@ -362,13 +372,17 @@ app.layout = dbc.Container([
                         "SB-cart",
                         "secondary"
                     )
-                ], md=6)
+                ], md=6),
 
-            ],
+             ],
                 className="g-3"
-            )
+            ),
+            
+            dbc.Col([
+                 html.P("")
+            ])
 
-        ], lg=7)
+        ], lg=7)              
 
     ],
         className="mb-4 g-3"
@@ -525,7 +539,7 @@ app.layout = dbc.Container([
     # =================================================
 
         dbc.Col([
-
+             
             dbc.Card([
             html.H6("prevalence some communicable  disease", className="text-center"),
                 dbc.CardBody([
@@ -861,7 +875,7 @@ def update_charts(value):
     locations=merged.index,
     color=value,
     hover_name="Sub city",
-    center={"lat": 8.96, "lon": 38.80},
+    center={"lat": 8.94, "lon": 38.78},
     zoom=10,
     opacity=0.7,
     #opacity=1,
