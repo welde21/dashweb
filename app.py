@@ -280,7 +280,9 @@ html.Div(style={"height": "110px"}),
 
                     dcc.Graph(
                         id="Addis_map",
-                        figure={}
+                        figure={},
+                        config={"responsive": True},
+                        style={"width": "100%", "height": "100%"}
                     )
 
                 ])
@@ -391,8 +393,15 @@ html.Div(style={"height": "110px"}),
                 dbc.CardBody([
 
                     dcc.Graph(
-                        id="Bar_graphe",
-                        figure={}
+                        id="Bar_graphe",figure={},
+                        config={
+                         "responsive": True,
+                          "displayModeBar": False
+                          },
+                         style={
+                          "width": "100%",
+                         "height": "450px"
+                            }
                     )
 
                 ])
@@ -410,8 +419,15 @@ html.Div(style={"height": "110px"}),
                 dbc.CardBody([
 
                     dcc.Graph(
-                        id="Pie_graphe",
-                        figure={}
+                        id="Pie_graphe",figure={},
+                        config={
+                         "responsive": True,
+                         "displayModeBar": False
+                          },
+                          style={
+                         "width": "100%",
+                         "height": "400px"
+                         }
                     )
 
                 ])
@@ -420,10 +436,15 @@ html.Div(style={"height": "110px"}),
                 className="shadow-sm border-0 rounded-4"
             )
 
-        ], lg=6)
+        ],          xs=12,
+         sm=12,
+         md=6,
+         lg=6,
+         xl=6)
 
     ],
         className="mb-4 g-3"
+
     ),
 
     # =================================================
@@ -673,26 +694,19 @@ def update_charts(value):
     # BAR CHART
     # =================================================
     bar_fig = px.bar(
-
         sorted_df,
-
-        x="Sub city",
-        y=value,
-
+        y="Sub city",
+        x=value,
         text=value,
-
+        orientation="h",
         color="Sub city",
-
         color_discrete_sequence=colors,
-
         template="plotly_white"
     )
-
     bar_fig.update_traces(
-
-        texttemplate='%{y:,}',
+        texttemplate='%{x:,}',
         textposition='outside',
-
+        cliponaxis=False,
         hovertemplate=
         "<b>%{x}</b><br>" +
         f"{value}: " +
@@ -704,15 +718,17 @@ def update_charts(value):
         title={
             "text": f"{value} by Sub City",
             "x": 0.5,
-            "xanchor": "center"
+            "xanchor": "center",
+            "font": {"size": 16}
         },
 
-        height=500,
+       # height=500,
 
         paper_bgcolor="#f8f9fa",
         plot_bgcolor="#f8f9fa",
 
         showlegend=False,
+        autosize=True,
 
         font=dict(
             family="Arial",
@@ -720,14 +736,23 @@ def update_charts(value):
         ),
 
         margin=dict(
-            t=70,
-            l=30,
-            r=30,
+            t=90,
+            l=20,
+            r=60,
             b=30
         ),
+        xaxis=dict(
+        title="",
+        tickfont=dict(size=10)
+    ),
+
+    yaxis=dict(
+        title="",
+        tickfont=dict(size=10)
+    ),
 
         transition={
-            "duration": 1200,
+            "duration": 800,
             "easing": "cubic-in-out"
         }
     )
@@ -752,7 +777,7 @@ def update_charts(value):
 
         textposition='inside',
 
-        textinfo='percent+label',
+        textinfo='percent',#+label',
 
         hovertemplate=
         "<b>%{label}</b><br>" +
@@ -764,26 +789,41 @@ def update_charts(value):
 
         title={
             "text": f"{value} Distribution",
-            "x": 0.5
+            "x": 0.5,
+            "xanchor": "center",
+            "font": {"size": 16}
         },
 
-        height=500,
-
-        paper_bgcolor="#f8f9fa",
-
+         paper_bgcolor="#f8f9fa",
+         plot_bgcolor="#f8f9fa",
+         autosize=True,
+         margin=dict(
+        l=10,
+        r=10,
+        t=50,
+        b=60
+    ),
         font=dict(
             family="Arial",
             size=14
-        )
+        ),
+        legend=dict(
+        orientation="h",
+        y=-0.15,
+        x=0.5,
+        xanchor="center",
+        yanchor="top",
+        font=dict(size=10)
+    )
     )
 
     
     # =================================================
     # MAP
     # =================================================
-    fig_map = px.choropleth_map(
+    fig_map = px.choropleth_mapbox(
     merged,
-    geojson=merged.geometry,
+    geojson=merged.__geo_interface__,
     locations=merged.index,
     color=value,
     hover_name="Sub city",
@@ -799,12 +839,19 @@ def update_charts(value):
 )
     fig_map.update_traces(
     marker_line_color="black",
-    marker_line_width=1.5
-)
+    marker_line_width=1
+),
 
     fig_map.update_layout(
+    #height =320,
+    autosize=True,
     margin=dict(r=0, t=0, l=0, b=0),
-    height=500
+    height=450,
+    mapbox_style="open-street-map",  # IMPORTANT (no token needed)
+    uirevision="constant",  # prevents reset on resize
+    coloraxis_colorbar=dict(
+        title=""
+    )
     )
 
 
@@ -858,24 +905,47 @@ def update_data(subcity):
     Output("summary_graphe","figure"),
     Input("summary_data","value")
 )
+#-----------------------
+#--- Line graphe 
+#-------------------------
 def summary_graphe(value):
     summary_line = px.line(
         summary,
         x="year",
         y=value,
         markers=True,
-        template="plotly_white"
+        template="plotly_white",
+        line_shape="spline"   # smooth professional curve
     )
 
+    summary_line.update_traces(
+        fill="tozeroy",
+        fillcolor="rgba(0,123,255,0.08)",
+        orientation="h",
+        line=dict(width=3),
+        marker=dict(size=7),
+        hovertemplate=
+        "<b>Year:</b> %{x}<br>" +
+        f"<b>{value}:</b> %{{y:,}}<extra></extra>"
+        
+    ),
     summary_line.update_layout(
-        legend=dict(
-            orientation="h",   # horizontal legend
-            yanchor="bottom",
-            y=-0.4,            # pushes legend below graph
-            xanchor="center",
-            x=0.5
-        )
+    legend=dict(
+        orientation="h",
+        x=0.5,
+        xanchor="center",
+        y=-0.25,   # 👈 BELOW graph
+        yanchor="top",
+        font=dict(size=10)
+    ),
+
+    margin=dict(
+        t=60,
+        l=40,
+        r=20,
+        b=90   # 👈 IMPORTANT space for legend
     )
+)
 
     return summary_line
 @callback(
@@ -883,21 +953,37 @@ def summary_graphe(value):
     Input("disease","value")
 
 )
+# for the prevalnce 
 def disease(value):
        diseas_line= px.line(diseas,x="Years",
                           y=value,
                           markers=True,
-                         template="plotly_white"
+                         template="plotly_white",
+                         #template="plotly_white",
+                         line_shape="spline"
                           )
+       
        diseas_line.update_layout(
         legend=dict(
             orientation="h",   # horizontal legend
             yanchor="bottom",
-            y=-0.4,            # pushes legend below graph
+            y=-0.64,            # pushes legend below graph
             xanchor="center",
             x=0.5
         )
-       )
+       ),
+       diseas_line.update_traces(
+        fill="tozeroy",
+        fillcolor="rgba(0,123,255,0.08)",
+        orientation="h",
+        line=dict(width=3),
+        marker=dict(size=7),
+        hovertemplate=
+        "<b>Year:</b> %{x}<br>" +
+        f"<b>{value}:</b> %{{y:,}}<extra></extra>"
+        
+    )
+       
        return diseas_line
 # =====================================================
 # RUN APP
