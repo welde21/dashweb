@@ -112,7 +112,7 @@ app.layout = dbc.Container([
                         "maxWidth": "100%"
                     }
                 ),
-                className="text-center"
+                className="text-center logo-img"
             )
 
         ],
@@ -124,21 +124,12 @@ app.layout = dbc.Container([
 
             html.H5(
                 "Addis Ababa City Administration",
-                className="""
-                text-primary
-                fw-bold
-                text-center
-                mb-1
-                """
+                className="header-title text-primary fw-bold text-center mb-1",
             ),
 
             html.H6(
                 "LINDA Familia project Landscape review MCH Dashboard",
-                className="""
-                text-primary
-                text-center
-                mb-0
-                """
+                className="header-subtitle text-primary text-center mb-0",
             ),
 
         ],
@@ -606,7 +597,7 @@ html.Div(style={"height": "110px"}),
                 [
 
                     html.P(
-                        "Desing by: Weldemariam Bahre",
+                        "developed by: Weldemariam Bahre",
                         className="mb-1"
                     ),
 
@@ -786,86 +777,7 @@ def update_charts(value):
         )
     )
 
-    # =================================================
-    # LINE CHART
-    # =================================================
     
-    # line_fig = px.line(
-
-    #     sorted_df,
-
-    #     x="Sub city",
-    #     y=value,
-
-    #     markers=True,
-
-    #     template="plotly_white"
-    # )
-
-    # line_fig.update_traces(
-    #     marker_line_width=3,
-    #     marker_line_color="black",
-
-    #     line=dict(
-    #         width=5,
-    #         shape="spline"
-    #     ),
-
-    #     marker=dict(
-    #         size=12,
-    #         line=dict(
-    #             width=2,
-    #             color="blue"
-    #         )
-    #     ),
-
-    #     hovertemplate=
-    #     "<b>%{x}</b><br>" +
-    #     f"{value}: " +
-    #     "%{y:,}<extra></extra>"
-    # )
-
-    # line_fig.update_layout(
-
-    #     title={
-    #         "text": f"{value} Trend by Sub City",
-    #         "x": 0.5
-    #     },
-
-    #     height=500,
-
-    #     hovermode="x unified",
-
-    #     paper_bgcolor="#f8f9fa",
-    #     plot_bgcolor="#f8f9fa",
-
-    #     font=dict(
-    #         family="Arial",
-    #         size=14
-    #     ),
-
-    #     margin=dict(
-    #         t=70,
-    #         l=40,
-    #         r=40,
-    #         b=40
-    #     ),
-
-    #     transition={
-    #         "duration": 1200,
-    #         "easing": "cubic-in-out"
-    #     }
-    # )
-
-    # line_fig.update_xaxes(
-    #     showgrid=False
-    # )
-
-    # line_fig.update_yaxes(
-    #     gridcolor="lightgray"
-    # )
-
-
     # =================================================
     # MAP
     # =================================================

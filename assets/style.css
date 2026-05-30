@@ -1,0 +1,27 @@
+.header-title {
+    font-size: 1.2rem;
+}
+
+.header-subtitle {
+    font-size: 1rem;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .header-title {
+        font-size: 0.9rem;
+    }
+
+    .header-subtitle {
+        font-size: 0.7rem;
+    }
+}
+.logo-img {
+    height: 70px;
+}
+
+@media (max-width: 768px) {
+    .logo-img {
+        height: 40px;
+    }
+}
